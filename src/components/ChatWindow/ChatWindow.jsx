@@ -749,21 +749,25 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
       {/* Enhanced Messages Area */}
       <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/30 p-2 sm:p-3 md:p-4 lg:p-6 relative z-10">
         {!chatId && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-8 sm:py-12"
-          >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-4 sm:mb-6 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-white/10 shadow-2xl">
-              <Users className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-purple-400" />
-            </div>
-            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              No Chat Selected
-            </h3>
-            <p className="text-gray-400 max-w-md mx-auto text-lg leading-relaxed">
-              Choose a conversation from the sidebar or start a new chat to begin messaging
-            </p>
-          </motion.div>
+          <div className="flex items-center justify-center h-full">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ type: "spring", stiffness: 200, damping: 20 }}
+              className="text-center max-w-md w-full p-8 rounded-[2rem] bg-slate-900/40 border border-white/5 shadow-2xl backdrop-blur-xl"
+            >
+              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/5 flex items-center justify-center shadow-inner border border-white/10 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent animate-pulse" />
+                <Users className="w-10 h-10 text-slate-300 relative z-10" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">
+                Welcome to ChatWave
+              </h3>
+              <p className="text-slate-400 text-sm font-medium leading-relaxed">
+                Experience seamless, real-time messaging. Select a conversation from the sidebar or start a new one.
+              </p>
+            </motion.div>
+          </div>
         )}
 
         {/* Search Results Header */}
@@ -832,15 +836,21 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
           </div>
         )}
 
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {displayMessages.map((message, index) => (
             <motion.div
               key={message.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              className={`flex ${message.fromMe ? 'justify-end' : 'justify-start'} mb-4`}
+              layout
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 400, 
+                damping: 30,
+                mass: 0.8
+              }}
+              className={`flex ${message.fromMe ? 'justify-end' : 'justify-start'} mb-4 w-full`}
             >
               <MessageBubble message={{ ...message, chatId: chatId || message.chatId }} />
             </motion.div>
@@ -874,9 +884,9 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
       {/* Enhanced Message Input */}
       {chatId && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative z-10 p-4 border-t border-white/10 bg-slate-900/90 backdrop-blur-2xl shadow-2xl"
+          className="relative z-10 px-4 py-4 sm:px-6 border-t border-white/5 bg-slate-900/60 backdrop-blur-xl"
         >
           {/* Reply Preview */}
           <AnimatePresence>

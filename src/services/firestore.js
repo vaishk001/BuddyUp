@@ -915,7 +915,7 @@ export function listenUserPresence(userId, cb) {
 
 // Canvas (Draw Together) Functions
 export function listenCanvasStrokes(chatId, cb) {
-  const q = query(collection(db, \chats/\/canvas\), orderBy('timestamp', 'asc'))
+  const q = query(collection(db, `chats/${chatId}/canvas`), orderBy('timestamp', 'asc'))
   return onSnapshot(q, snapshot => {
     const strokes = snapshot.docs.map(d => ({ id: d.id, ...d.data() }))
     cb(strokes)
@@ -923,14 +923,14 @@ export function listenCanvasStrokes(chatId, cb) {
 }
 
 export async function addCanvasStroke(chatId, strokeData) {
-  await addDoc(collection(db, \chats/\/canvas\), {
+  await addDoc(collection(db, `chats/${chatId}/canvas`), {
     ...strokeData,
     timestamp: serverTimestamp()
   })
 }
 
 export async function clearCanvas(chatId) {
-  const snap = await getDocs(collection(db, \chats/\/canvas\))
+  const snap = await getDocs(collection(db, `chats/${chatId}/canvas`))
   const batch = writeBatch(db)
   snap.docs.forEach(d => batch.delete(d.ref))
   await batch.commit()

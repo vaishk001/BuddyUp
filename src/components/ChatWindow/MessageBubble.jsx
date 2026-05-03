@@ -264,13 +264,11 @@ export default function MessageBubble({ message }) {
       }}
     >
       <motion.div
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
-        className={`relative p-4 rounded-3xl backdrop-blur-sm border ${
+        className={`relative p-3 sm:p-4 rounded-2xl shadow-sm border ${
           message.fromMe 
-            ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-br-md border-blue-500/30' 
-            : 'bg-white/10 text-white rounded-bl-md border-white/10'
-        } shadow-lg`}
+            ? 'bg-[var(--accent-color,#4f46e5)] text-white rounded-br-[4px] border-transparent' 
+            : 'bg-slate-800/95 text-slate-100 rounded-bl-[4px] border-white/5 backdrop-blur-md'
+        }`}
       >
     {/* Message Content: support text, stickers/GIFs, images and video payloads */}
         {isEditing ? (

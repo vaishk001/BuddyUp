@@ -26,6 +26,7 @@ import {
 import MessageInput from '../Message/MessageInput'
 import MessageBubble from './MessageBubble'
 import UserProfileModal from '../Profile/UserProfileModal'
+import LiveCanvasModal from '../LiveCanvas/LiveCanvasModal'
 import { listenMessages, sendMessage as sendMessageToFs, togglePinnedChat, toggleMutedChat, getGroupMembers, clearChatMessages, getChat, getUser, listenTypingIndicators, setTypingIndicator, listenUserPresence, setUserStatusFlags, toggleStarMessage, markMessagesAsDelivered, markMessagesAsRead } from '../../services/firestore'
 import { useAuth } from '../../contexts/AuthContext'
 import { useUI } from '../../contexts/UIContext'
@@ -52,6 +53,7 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [showStarredMessages, setShowStarredMessages] = useState(false)
   const [showUserProfile, setShowUserProfile] = useState(false)
+  const [showLiveCanvas, setShowLiveCanvas] = useState(false)
   const { startCall } = useCall()
 
   // Filter starred messages
@@ -558,6 +560,14 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
               title="Starred Messages"
             >
               <Star className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors ${showStarredMessages ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300 group-hover:text-yellow-400'}`} />
+            </button>
+            
+            <button 
+              onClick={() => setShowLiveCanvas(true)}
+              className="p-2 sm:p-2.5 md:p-3 hover:bg-white/10 rounded-lg sm:rounded-xl transition-all duration-300 group hover:scale-105"
+              title="Live Canvas"
+            >
+              <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300 group-hover:text-purple-400 transition-colors" />
             </button>
             
             <button 
@@ -1152,7 +1162,6 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
         )}
       </AnimatePresence>
 
-      {/* User Profile Modal */}
       <UserProfileModal
         open={showUserProfile}
         onClose={() => setShowUserProfile(false)}
@@ -1204,6 +1213,13 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
           }
         }}
       />
+
+      {showLiveCanvas && (
+        <LiveCanvasModal 
+          chatId={chatId} 
+          onClose={() => setShowLiveCanvas(false)} 
+        />
+      )}
     </div>
   )
 }

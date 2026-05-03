@@ -32,6 +32,7 @@ export default function ActiveCallWindow() {
   const remoteVideoRef = useRef(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [callDuration, setCallDuration] = useState(0)
+  const [isSwapped, setIsSwapped] = useState(false)
 
   // Set up local video stream
   useEffect(() => {
@@ -92,16 +93,33 @@ export default function ActiveCallWindow() {
       >
         {/* Video Container */}
         <div className="relative w-full h-full bg-black group/call">
-          {/* Remote Video (Main) */}
+          
+          {/* Remote Video (Can be Main or PiP) */}
           {isVideoCall ? (
-            <video
-              ref={remoteVideoRef}
-              autoPlay
-              playsInline
-              className={`w-full h-full ${isFullscreen || window.innerWidth < 640 ? 'object-contain bg-black' : 'object-cover'}`}
-            />
+            <motion.div
+              layout
+              drag={isSwapped}
+              dragMomentum={false}
+              dragConstraints={{ left: -250, right: 0, top: 0, bottom: 400 }}
+              onClick={(e) => {
+                if (isSwapped) {
+                  e.stopPropagation()
+                  setIsSwapped(false)
+                }
+              }}
+              className={isSwapped
+                ? "absolute top-24 right-4 w-32 h-48 sm:w-36 sm:h-52 rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-slate-800 cursor-pointer z-30"
+                : "absolute inset-0 z-0 bg-black"}
+            >
+              <video
+                ref={remoteVideoRef}
+                autoPlay
+                playsInline
+                className={`w-full h-full ${!isSwapped && (isFullscreen || window.innerWidth < 640) ? 'object-contain' : 'object-cover'}`}
+              />
+            </motion.div>
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900">
+            <div className="absolute inset-0 z-0 w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900">
               {/* Hidden audio element for voice calls */}
               <audio ref={remoteVideoRef} autoPlay playsInline className="hidden" />
               <div className="text-center">
@@ -119,13 +137,22 @@ export default function ActiveCallWindow() {
             </div>
           )}
 
-          {/* Local Video (PiP) */}
+          {/* Local Video (Can be PiP or Main) */}
           {isVideoCall && localStream && (
             <motion.div
-              drag
+              layout
+              drag={!isSwapped}
               dragMomentum={false}
-              dragConstraints={{ left: -300, right: 0, top: 0, bottom: 400 }}
-              className="absolute top-20 right-4 w-28 h-40 rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-slate-800 cursor-move z-30"
+              dragConstraints={{ left: -250, right: 0, top: 0, bottom: 400 }}
+              onClick={(e) => {
+                if (!isSwapped) {
+                  e.stopPropagation()
+                  setIsSwapped(true)
+                }
+              }}
+              className={!isSwapped
+                ? "absolute top-24 right-4 w-32 h-48 sm:w-36 sm:h-52 rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-slate-800 cursor-pointer z-30"
+                : "absolute inset-0 z-0 bg-black"}
             >
               {!isVideoOff ? (
                 <video
@@ -133,12 +160,12 @@ export default function ActiveCallWindow() {
                   autoPlay
                   playsInline
                   muted
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full ${isSwapped && (isFullscreen || window.innerWidth < 640) ? 'object-contain' : 'object-cover'}`}
                   style={{ transform: 'scaleX(-1)' }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-slate-800">
-                  <VideoOff className="w-8 h-8 text-gray-400" />
+                  <VideoOff className="w-10 h-10 text-gray-400" />
                 </div>
               )}
             </motion.div>

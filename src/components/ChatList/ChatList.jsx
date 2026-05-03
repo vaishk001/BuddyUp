@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Pin, Volume2, VolumeX, CheckCheck, Check, Users, 
@@ -16,6 +16,26 @@ export default function ChatList({ selectedChatId, onSelect, searchQuery, active
   const [hoveredChat, setHoveredChat] = useState(null)
   const [menuOpen, setMenuOpen] = useState(null)
   const [chatDisplayData, setChatDisplayData] = useState({})
+  const menuRef = useRef(null)
+
+  // Close menu on click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuOpen && menuRef.current && !menuRef.current.contains(event.target)) {
+        // Don't close if clicking the trigger button
+        if (!event.target.closest(`[data-menu-trigger="${menuOpen}"]`)) {
+          setMenuOpen(null)
+        }
+      }
+    }
+
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [menuOpen])
 
   useEffect(() => {
     if (!user) return
@@ -340,6 +360,7 @@ export default function ChatList({ selectedChatId, onSelect, searchQuery, active
                     </button>
                     
                     <button 
+                      data-menu-trigger={chat.id}
                       onClick={(e) => {
                         e.stopPropagation()
                         setMenuOpen(menuOpen === chat.id ? null : chat.id)
@@ -354,6 +375,7 @@ export default function ChatList({ selectedChatId, onSelect, searchQuery, active
                   <AnimatePresence>
                     {menuOpen === chat.id && (
                       <motion.div
+                        ref={menuRef}
                         initial={{ opacity: 0, scale: 0.95, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}

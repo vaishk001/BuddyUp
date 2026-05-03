@@ -34,6 +34,7 @@ import { useCall } from '../../contexts/CallContext'
 export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
   const [messages, setMessages] = useState([])
   const messagesEndRef = useRef(null)
+  const headerMenuRef = useRef(null)
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
   const [pinned, setPinned] = useState(false)
   const [muted, setMuted] = useState(false)
@@ -81,6 +82,22 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+  
+  // Close header menu on click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (headerMenuRef.current && !headerMenuRef.current.contains(event.target)) {
+        setHeaderMenuOpen(false)
+      }
+    }
+
+    if (headerMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [headerMenuOpen])
   
   // Mark messages as read when user is viewing the chat
   useEffect(() => {
@@ -579,7 +596,7 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
               <Info className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300 group-hover:text-blue-400 transition-colors" />
             </button>
             
-            <div className="relative">
+            <div className="relative" ref={headerMenuRef}>
               <button 
                 onClick={(e) => {
                   e.stopPropagation()
@@ -593,11 +610,6 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
               <AnimatePresence>
                 {headerMenuOpen && (
                   <>
-                    {/* Invisible backdrop to close menu on outside click */}
-                    <div 
-                      className="fixed inset-0 z-[100]" 
-                      onClick={() => setHeaderMenuOpen(false)}
-                    />
                     <motion.div
                       initial={{ opacity: 0, y: 10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}

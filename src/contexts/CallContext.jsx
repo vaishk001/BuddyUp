@@ -91,6 +91,33 @@ export function CallProvider({ children }) {
     }
   }, [user?.uid, activeCall])
 
+  // Listen for active call status changes (to handle remote ending the call)
+  useEffect(() => {
+    if (!activeCall?.callId) return
+
+    const unsub = onSnapshot(doc(db, 'calls', activeCall.callId), (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data()
+        // If the other party ended the call and we haven't processed it yet
+        if (data.status === 'ended' || data.status === 'rejected') {
+          // Check if we already handled it locally
+          webrtcService.cleanup()
+          setCallStatus('ended')
+          setTimeout(() => {
+            setActiveCall(null)
+            setLocalStream(null)
+            setRemoteStream(null)
+            setCallStatus(null)
+            setIsMuted(false)
+            setIsVideoOff(false)
+          }, 1000)
+        }
+      }
+    })
+
+    return () => unsub()
+  }, [activeCall?.callId])
+
   // Start a call
   const startCall = async (calleeId, calleeName, isVideoCall = false) => {
     try {

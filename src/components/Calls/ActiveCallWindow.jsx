@@ -37,6 +37,7 @@ export default function ActiveCallWindow() {
   useEffect(() => {
     if (localVideoRef.current && localStream && !isVideoOff) {
       localVideoRef.current.srcObject = localStream
+      localVideoRef.current.play().catch(e => console.warn('Local play failed', e))
     }
   }, [localStream, isVideoOff])
 
@@ -44,6 +45,7 @@ export default function ActiveCallWindow() {
   useEffect(() => {
     if (remoteVideoRef.current && remoteStream) {
       remoteVideoRef.current.srcObject = remoteStream
+      remoteVideoRef.current.play().catch(e => console.warn('Remote play failed', e))
     }
   }, [remoteStream])
 

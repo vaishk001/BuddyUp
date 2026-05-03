@@ -51,11 +51,11 @@ export default function ChatPage() {
             selectedChatId={selectedChat?.id}
             onSelectChat={(chat) => {
               setSelectedChat(chat)
-              navigate(`/chat/${chat.id}`, { replace: true })
+              navigate(`/chat/${chat.id}`)
             }}
             onCreateChat={(chatId) => {
               setSelectedChat({ id: chatId })
-              navigate(`/chat/${chatId}`, { replace: true })
+              navigate(`/chat/${chatId}`)
             }}
           />
         )
@@ -90,7 +90,7 @@ export default function ChatPage() {
               chatId={selectedChat.id}
               onBack={() => {
                 setSelectedChat(null)
-                navigate('/chat', { replace: true })
+                navigate('/chat')
               }}
               onToggleInfo={() => setShowInfoPanel(!showInfoPanel)}
             />

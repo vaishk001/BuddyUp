@@ -35,10 +35,10 @@ export default function ActiveCallWindow() {
 
   // Set up local video stream
   useEffect(() => {
-    if (localVideoRef.current && localStream) {
+    if (localVideoRef.current && localStream && !isVideoOff) {
       localVideoRef.current.srcObject = localStream
     }
-  }, [localStream])
+  }, [localStream, isVideoOff])
 
   // Set up remote video stream
   useEffect(() => {
@@ -82,19 +82,21 @@ export default function ActiveCallWindow() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        className={`fixed ${
-          isFullscreen ? 'inset-0' : 'bottom-4 right-4 w-96 h-[500px]'
-        } z-[150] bg-slate-900 rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col`}
+        className={`fixed z-[150] bg-slate-900 shadow-2xl overflow-hidden transition-all duration-300 ${
+          isFullscreen 
+            ? 'inset-0 rounded-none border-none' 
+            : 'inset-0 sm:bottom-6 sm:top-auto sm:left-auto sm:right-6 sm:w-[380px] sm:h-[550px] sm:rounded-3xl sm:border border-white/10'
+        }`}
       >
         {/* Video Container */}
-        <div className="relative flex-1 bg-black">
+        <div className="relative w-full h-full bg-black group/call">
           {/* Remote Video (Main) */}
           {isVideoCall ? (
             <video
               ref={remoteVideoRef}
               autoPlay
               playsInline
-              className="w-full h-full object-cover"
+              className={`w-full h-full ${isFullscreen || window.innerWidth < 640 ? 'object-contain bg-black' : 'object-cover'}`}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900">
@@ -120,7 +122,8 @@ export default function ActiveCallWindow() {
             <motion.div
               drag
               dragMomentum={false}
-              className="absolute top-4 right-4 w-32 h-40 rounded-xl overflow-hidden shadow-lg border-2 border-white/20 bg-slate-800 cursor-move z-10"
+              dragConstraints={{ left: -300, right: 0, top: 0, bottom: 400 }}
+              className="absolute top-20 right-4 w-28 h-40 rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-slate-800 cursor-move z-30"
             >
               {!isVideoOff ? (
                 <video
@@ -132,7 +135,7 @@ export default function ActiveCallWindow() {
                   style={{ transform: 'scaleX(-1)' }}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-slate-700">
+                <div className="w-full h-full flex items-center justify-center bg-slate-800">
                   <VideoOff className="w-8 h-8 text-gray-400" />
                 </div>
               )}
@@ -158,20 +161,20 @@ export default function ActiveCallWindow() {
           )}
 
           {/* Top Bar */}
-          <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/60 to-transparent z-10">
+          <div className="absolute top-0 left-0 right-0 p-6 pt-8 sm:pt-6 bg-gradient-to-b from-black/80 via-black/40 to-transparent z-40 transition-opacity duration-300 opacity-100 sm:opacity-0 sm:group-hover/call:opacity-100">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-white font-semibold text-lg">{displayName}</h3>
+                <h3 className="text-white font-semibold text-xl drop-shadow-md">{displayName}</h3>
                 {callStatus === 'connected' && (
-                  <p className="text-gray-300 text-sm">{formatDuration(callDuration)}</p>
+                  <p className="text-white/90 text-sm font-medium drop-shadow-md">{formatDuration(callDuration)}</p>
                 )}
                 {callStatus === 'ringing' && (
-                  <p className="text-yellow-400 text-sm animate-pulse">Ringing...</p>
+                  <p className="text-green-400 text-sm font-medium animate-pulse drop-shadow-md">Ringing...</p>
                 )}
               </div>
               <button
                 onClick={toggleFullscreen}
-                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all backdrop-blur-sm"
+                className="w-12 h-12 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white transition-all backdrop-blur-md hidden sm:flex"
               >
                 {isFullscreen ? (
                   <Minimize2 className="w-5 h-5" />
@@ -184,34 +187,24 @@ export default function ActiveCallWindow() {
         </div>
 
         {/* Control Bar */}
-        <div className="p-6 bg-gradient-to-t from-slate-900 via-slate-800 to-transparent backdrop-blur-xl">
-          <div className="flex items-center justify-center gap-4">
+        <div className="absolute bottom-0 left-0 right-0 p-8 pb-10 sm:pb-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-40 transition-opacity duration-300 opacity-100 sm:opacity-0 sm:group-hover/call:opacity-100">
+          <div className="flex items-center justify-center gap-6">
             {/* Mute/Unmute */}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={toggleMute}
-              className={`w-14 h-14 rounded-full flex items-center justify-center transition-all shadow-lg ${
+              className={`w-14 h-14 rounded-full flex items-center justify-center transition-all backdrop-blur-md ${
                 isMuted 
-                  ? 'bg-red-500 hover:bg-red-600 shadow-red-500/30' 
-                  : 'bg-white/10 hover:bg-white/20 shadow-white/10'
+                  ? 'bg-red-500/90 text-white' 
+                  : 'bg-white/20 hover:bg-white/30 text-white'
               }`}
             >
               {isMuted ? (
-                <MicOff className="w-6 h-6 text-white" />
+                <MicOff className="w-6 h-6" />
               ) : (
-                <Mic className="w-6 h-6 text-white" />
+                <Mic className="w-6 h-6" />
               )}
-            </motion.button>
-
-            {/* End Call */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={endCall}
-              className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center text-white shadow-lg shadow-red-500/30 transition-all"
-            >
-              <PhoneOff className="w-7 h-7" />
             </motion.button>
 
             {/* Video Toggle (only for video calls) */}
@@ -220,16 +213,16 @@ export default function ActiveCallWindow() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={toggleVideo}
-                className={`w-14 h-14 rounded-full flex items-center justify-center transition-all shadow-lg ${
+                className={`w-14 h-14 rounded-full flex items-center justify-center transition-all backdrop-blur-md ${
                   isVideoOff 
-                    ? 'bg-red-500 hover:bg-red-600 shadow-red-500/30' 
-                    : 'bg-white/10 hover:bg-white/20 shadow-white/10'
+                    ? 'bg-red-500/90 text-white' 
+                    : 'bg-white/20 hover:bg-white/30 text-white'
                 }`}
               >
                 {isVideoOff ? (
-                  <VideoOff className="w-6 h-6 text-white" />
+                  <VideoOff className="w-6 h-6" />
                 ) : (
-                  <Video className="w-6 h-6 text-white" />
+                  <Video className="w-6 h-6" />
                 )}
               </motion.button>
             )}
@@ -240,12 +233,23 @@ export default function ActiveCallWindow() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={switchCamera}
-                className="w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all shadow-lg shadow-white/10"
+                className="w-14 h-14 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all backdrop-blur-md"
               >
                 <SwitchCamera className="w-6 h-6" />
               </motion.button>
             )}
+
+            {/* End Call - slightly larger */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={endCall}
+              className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center text-white shadow-xl shadow-red-500/30 transition-all"
+            >
+              <PhoneOff className="w-7 h-7" />
+            </motion.button>
           </div>
+        </div>
         </div>
       </motion.div>
     </AnimatePresence>

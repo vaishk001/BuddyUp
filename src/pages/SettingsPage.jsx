@@ -40,7 +40,7 @@ const ACCENT_COLORS = [
   { name: 'Emerald', value: '#10b981', gradient: 'from-emerald-500 to-green-500' },
   { name: 'Violet', value: '#8b5cf6', gradient: 'from-violet-500 to-purple-500' }
 ]
-export default function SettingsPage() {
+export default function SettingsPage({ onBack }) {
   const { user } = useAuth()
   const { showToast } = useUI()
   const navigate = useNavigate()
@@ -581,13 +581,13 @@ export default function SettingsPage() {
 
  return (
   <div className="flex h-screen bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900 text-white overflow-hidden">
-    <div className="w-80 lg:w-96 relative">
+    <div className="hidden md:block w-80 lg:w-96 relative flex-shrink-0">
       <Sidebar 
         onSelectChat={(chat) => {
-          navigate('/chat');
+          navigate(`/chat/${chat.id}`);
         }}
         onCreateChat={(chatId) => {
-          navigate('/chat');
+          navigate(`/chat/${chatId}`);
         }}
         onClose={() => navigate('/chat')}
       />
@@ -602,7 +602,7 @@ export default function SettingsPage() {
       >
         <div className="flex items-center gap-4">
           <button
-            onClick={() => navigate('/chat')}
+            onClick={() => onBack ? onBack() : navigate('/chat')}
             className="p-3 hover:bg-white/10 rounded-2xl transition-all duration-300 hover:scale-105 group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />

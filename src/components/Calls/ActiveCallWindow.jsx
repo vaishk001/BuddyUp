@@ -98,6 +98,8 @@ export default function ActiveCallWindow() {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900">
+              {/* Hidden audio element for voice calls */}
+              <audio ref={remoteVideoRef} autoPlay playsInline className="hidden" />
               <div className="text-center">
                 <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-4xl font-bold shadow-xl shadow-purple-500/20">
                   {displayName[0]?.toUpperCase() || <User className="w-16 h-16" />}

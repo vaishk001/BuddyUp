@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import NavigationRail from '../components/Navigation/NavigationRail'
 import Sidebar from '../components/Sidebar/Sidebar'
@@ -11,10 +12,19 @@ import SettingsPage from './SettingsPage'
 import { getChat } from '../services/firestore'
 
 export default function ChatPage() {
-  const [selectedChat, setSelectedChat] = useState(null)
+  const { chatId: urlChatId } = useParams()
+  const navigate = useNavigate()
+  const [selectedChat, setSelectedChat] = useState(urlChatId ? { id: urlChatId } : null)
   const [activeTab, setActiveTab] = useState('chats')
   const [showInfoPanel, setShowInfoPanel] = useState(true)
   const [chatData, setChatData] = useState(null)
+
+  // Sync URL param to selectedChat
+  useEffect(() => {
+    if (urlChatId && (!selectedChat || selectedChat.id !== urlChatId)) {
+      setSelectedChat({ id: urlChatId })
+    }
+  }, [urlChatId])
 
   // Fetch chat data when selectedChat changes
   useEffect(() => {
@@ -39,8 +49,14 @@ export default function ChatPage() {
         return (
           <Sidebar 
             selectedChatId={selectedChat?.id}
-            onSelectChat={setSelectedChat}
-            onCreateChat={(chatId) => setSelectedChat({ id: chatId })}
+            onSelectChat={(chat) => {
+              setSelectedChat(chat)
+              navigate(`/chat/${chat.id}`, { replace: true })
+            }}
+            onCreateChat={(chatId) => {
+              setSelectedChat({ id: chatId })
+              navigate(`/chat/${chatId}`, { replace: true })
+            }}
           />
         )
       case 'friend-requests':
@@ -60,19 +76,22 @@ export default function ChatPage() {
   const renderMainContent = () => {
     if (activeTab === 'settings') {
       return (
-        <div className="flex-1 overflow-auto">
-          <SettingsPage />
+        <div className="flex-1 h-full w-full overflow-auto">
+          <SettingsPage onBack={() => setActiveTab('chats')} />
         </div>
       )
     }
 
     if (activeTab === 'chats') {
       return (
-        <div className="flex-1 flex min-w-0 bg-slate-900 relative">
+        <div className="flex-1 h-full w-full flex min-w-0 bg-slate-900 relative">
           {selectedChat ? (
             <ChatWindow 
               chatId={selectedChat.id}
-              onBack={() => setSelectedChat(null)}
+              onBack={() => {
+                setSelectedChat(null)
+                navigate('/chat', { replace: true })
+              }}
               onToggleInfo={() => setShowInfoPanel(!showInfoPanel)}
             />
           ) : (
@@ -107,7 +126,7 @@ export default function ChatPage() {
 
     // For friend-requests, calls and contacts, show empty state
     return (
-      <div className="flex-1 flex items-center justify-center bg-slate-900">
+      <div className="flex-1 h-full w-full flex items-center justify-center bg-slate-900">
         <div className="text-center text-gray-500">
           <p className="text-xl font-medium mb-2">
             {activeTab === 'friend-requests' ? 'Manage your friend requests' : 
@@ -120,22 +139,26 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 text-white overflow-hidden">
-      {/* Navigation Rail */}
-      <NavigationRail 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab} 
-      />
+    <div className="flex h-screen w-full bg-slate-950 text-white overflow-hidden">
+      {/* Navigation Rail - Hidden on mobile when a chat is open */}
+      <div className={`${selectedChat ? 'hidden md:flex' : 'flex'} flex-shrink-0 h-full`}>
+        <NavigationRail 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab} 
+        />
+      </div>
 
-      {/* Left Panel (Sidebar/Calls/Contacts) */}
+      {/* Left Panel (Sidebar/Calls/Contacts) - Hidden on mobile when a chat is open */}
       {activeTab !== 'settings' && (
-        <div className="w-80 lg:w-96 h-full flex-shrink-0">
+        <div className={`flex-1 md:w-80 lg:w-96 md:flex-none h-full flex-shrink-0 ${selectedChat ? 'hidden md:flex' : 'flex'} flex-col`}>
           {renderLeftPanel()}
         </div>
       )}
 
-      {/* Main Content Area */}
-      {renderMainContent()}
+      {/* Main Content Area - Hidden on mobile when NO chat is open AND not on settings tab */}
+      <div className={`flex-1 h-full min-w-0 ${!selectedChat && activeTab !== 'settings' ? 'hidden md:flex' : 'flex'} flex-col`}>
+        {renderMainContent()}
+      </div>
     </div>
   )
 }

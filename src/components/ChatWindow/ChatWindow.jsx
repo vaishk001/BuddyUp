@@ -544,7 +544,7 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
             </button>
             
             <button 
-              className="p-2 sm:p-2.5 md:p-3 hover:bg-white/10 rounded-lg sm:rounded-xl transition-all duration-300 group hover:scale-105 hidden sm:block"
+              className="p-2 sm:p-2.5 md:p-3 hover:bg-white/10 rounded-lg sm:rounded-xl transition-all duration-300 group hover:scale-105"
               onClick={() => {
                 if (otherUser?.id) {
                   startCall(otherUser.id, otherUser.displayName || 'User', false)
@@ -558,7 +558,7 @@ export default function ChatWindow({ chatId, onBack, onToggleInfo }) {
             </button>
             
             <button 
-              className="p-2 sm:p-2.5 md:p-3 hover:bg-white/10 rounded-lg sm:rounded-xl transition-all duration-300 group hover:scale-105 hidden sm:block"
+              className="p-2 sm:p-2.5 md:p-3 hover:bg-white/10 rounded-lg sm:rounded-xl transition-all duration-300 group hover:scale-105"
               onClick={() => {
                 if (otherUser?.id) {
                   startCall(otherUser.id, otherUser.displayName || 'User', true)

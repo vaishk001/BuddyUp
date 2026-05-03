@@ -184,7 +184,6 @@ export default function ActiveCallWindow() {
               </button>
             </div>
           </div>
-        </div>
 
         {/* Control Bar */}
         <div className="absolute bottom-0 left-0 right-0 p-8 pb-10 sm:pb-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-40 transition-opacity duration-300 opacity-100 sm:opacity-0 sm:group-hover/call:opacity-100">

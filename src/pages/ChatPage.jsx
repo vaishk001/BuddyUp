@@ -16,7 +16,7 @@ export default function ChatPage() {
   const navigate = useNavigate()
   const [selectedChat, setSelectedChat] = useState(urlChatId ? { id: urlChatId } : null)
   const [activeTab, setActiveTab] = useState('chats')
-  const [showInfoPanel, setShowInfoPanel] = useState(true)
+  const [showInfoPanel, setShowInfoPanel] = useState(window.innerWidth >= 1024)
   const [chatData, setChatData] = useState(null)
 
   // Sync URL param to selectedChat

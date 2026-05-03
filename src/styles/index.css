@@ -54,10 +54,18 @@
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
   }
 
-  /* Scale base font-size so Tailwind's rem sizes respect user's fontScale */
-  html {
-    font-size: calc(100% * var(--chat-font-scale, 1));
+  /* Scale only message text so Tailwind's layouts don't break */
+  .message-bubble-own, .message-bubble-other, .input-modern, .glass-input {
+    font-size: calc(1rem * var(--chat-font-scale, 1));
   }
+
+  /* Override purple-500 with user's accent color everywhere */
+  .text-purple-400 { color: color-mix(in srgb, var(--accent-color) 80%, white) !important; }
+  .text-purple-500, .group-hover\:text-purple-500:hover, .hover\:text-purple-500:hover { color: var(--accent-color) !important; }
+  .bg-purple-500, .hover\:bg-purple-500:hover { background-color: var(--accent-color) !important; }
+  .border-purple-500, .focus\:border-purple-500:focus, .focus\:ring-purple-500:focus { border-color: var(--accent-color) !important; }
+  .from-purple-500 { --tw-gradient-from: var(--accent-color) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+  .to-pink-500 { --tw-gradient-to: color-mix(in srgb, var(--accent-color) 60%, white) !important; }
 
   /* Global Scrollbar Styling */
   ::-webkit-scrollbar {

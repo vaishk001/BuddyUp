@@ -1,0 +1,565 @@
+/* stylelint-disable at-rule-no-unknown */
+/* Use @import forms that CSS validators recognize while Tailwind/PostCSS will process these imports */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+/* Enable utilities import */
+@import "tailwindcss/utilities";
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Appearance variables (controlled by Settings) */
+  :root {
+    --accent-color: #8b5cf6;
+    --accent-hover: #7c3aed;
+    --chat-font-scale: 1;
+    
+    /* Modern Dark Theme Palette */
+    --bg-primary: #0f172a; /* Slate 900 */
+    --bg-secondary: #1e293b; /* Slate 800 */
+    --bg-tertiary: #334155; /* Slate 700 */
+    
+    --text-primary: #f8fafc; /* Slate 50 */
+    --text-secondary: #94a3b8; /* Slate 400 */
+    --text-tertiary: #64748b; /* Slate 500 */
+
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    
+    --app-bg-dark: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+    --app-bg-light: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+  }
+
+  /* Light Theme Override */
+  [data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-tertiary: #64748b;
+
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  /* Scale base font-size so Tailwind's rem sizes respect user's fontScale */
+  html {
+    font-size: calc(100% * var(--chat-font-scale, 1));
+  }
+
+  /* Global Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.2);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.4);
+  }
+
+  /* Glassmorphism Utilities */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+  }
+  
+  .glass-panel {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Modern Input Reset */
+  input, textarea {
+    background: transparent;
+    color: var(--text-primary);
+  }
+  input::placeholder, textarea::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  /* Light mode overrides: make previously white text visible on light backgrounds */
+  .light body, .light #root {
+    background: var(--app-bg-light);
+    color: var(--text-light);
+  }
+
+  /* Convert common dark-mode utility usages to readable light-mode styles by overriding key classes */
+  .light .text-white { color: var(--text-light) !important; }
+  .light .text-gray-400 { color: var(--muted-light) !important; }
+  .light .text-sm { color: var(--text-light) !important; }
+  .light .bg-slate-900 { background: rgba(255,255,255,0.9) !important; }
+  .light .bg-white\/5 { background: rgba(15,23,42,0.04) !important; }
+  .light .bg-white\/3 { background: rgba(2,6,23,0.03) !important; }
+  .light .bg-white\/10 { background: rgba(2,6,23,0.06) !important; }
+  .light .border-white\/10 { border-color: rgba(15,23,42,0.06) !important; }
+  .light .backdrop-blur-xl { -webkit-backdrop-filter: blur(6px) !important; backdrop-filter: blur(6px) !important; }
+
+  /* Accent helper classes that use the saved accent color */
+  .accent-text { color: var(--accent-color) !important }
+  .accent-bg { background-color: var(--accent-color) !important }
+  /* Accent helper classes that use the saved accent color */
+  .accent-text { color: var(--accent-color) !important }
+  .accent-bg { background-color: var(--accent-color) !important }
+
+  /* Additional comprehensive light-mode overrides for common components */
+  /* Define light-mode panel variables */
+  .light {
+    --panel-bg: rgba(255,255,255,0.98);
+    --panel-bg-2: rgba(250,250,250,0.95);
+    --muted-light-2: #6b7280;
+  }
+
+  /* Replace dark backgrounds and gradients with light panels */
+  .light .bg-slate-900,
+  .light .bg-slate-900\/80,
+  .light .bg-slate-900\/95,
+  .light .bg-slate-800\/95,
+  .light .bg-slate-800\/50,
+  .light .bg-gradient-to-br,
+  .light .bg-gradient-chat,
+  .light .bg-gradient-sidebar {
+    background: var(--panel-bg) !important;
+    color: var(--text-light) !important;
+  }
+
+  /* Make glassy overlays subtle in light mode */
+  .light .bg-white\/5,
+  .light .bg-white\/3,
+  .light .bg-white\/10,
+  .light .bg-white\/30 {
+    background: rgba(15,23,42,0.03) !important;
+  }
+
+  .light .text-white { color: var(--text-light) !important; }
+  .light .text-gray-400 { color: var(--muted-light) !important; }
+  .light .text-sm { color: var(--muted-light) !important; }
+
+  /* Inputs, selects, and modern input styles */
+  .light input,
+  .light textarea,
+  .light select,
+  .light .input-modern {
+    background: #fff !important;
+    color: var(--text-light) !important;
+    border-color: rgba(2,6,23,0.06) !important;
+  }
+
+  /* Button / accent treatments in light mode */
+  .light .btn-primary,
+  .light .accent-bg {
+    background: linear-gradient(90deg, var(--accent-color) 0%, color-mix(in srgb, var(--accent-color) 60%, white 40%)) !important;
+    color: white !important;
+  }
+
+  /* Overlays and modal backdrops */
+  .light .absolute.inset-0.bg-black\/50 { background: rgba(0,0,0,0.03) !important }
+
+  /* Ensure small helper text has reasonable contrast */
+  .light .text-xs,
+  .light .text-sm { color: var(--muted-light) !important }
+
+  /* Prevent content overlap with proper z-index layering */
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer utilities {
+  /* Enhanced Custom Scrollbar */
+  @supports (scrollbar-width: thin) {
+    .scrollbar-thin {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    }
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  /* Enhanced Glass Morphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.85);
+    -webkit-backdrop-filter: blur(25px);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Message-specific utilities */
+  .message-shadow {
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.15);
+  }
+
+  .message-shadow-hover {
+    box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Z-index layers to prevent overlap */
+  .z-dialog {
+    z-index: 100;
+  }
+
+  .z-modal {
+    z-index: 200;
+  }
+
+  .text-ellipsis-multiline {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .z-tooltip {
+    z-index: 400;
+  }
+
+  .z-notification {
+    z-index: 500;
+  }
+
+  /* Modern gradient backgrounds */
+  .bg-gradient-chat {
+    background: linear-gradient(135deg, 
+      rgba(15, 23, 42, 0.95) 0%,
+      rgba(88, 28, 135, 0.15) 50%,
+      rgba(15, 23, 42, 0.95) 100%);
+  }
+
+  .bg-gradient-sidebar {
+    background: linear-gradient(180deg,
+      rgba(15, 23, 42, 0.98) 0%,
+      rgba(30, 41, 59, 0.95) 100%);
+  }
+
+  /* Text overflow prevention */
+  .text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .text-ellipsis-multiline {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Smooth transitions */
+  .smooth-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Enhanced Custom Animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.2s ease-out;
+}
+
+/* Typing Indicator Animation */
+@keyframes typingBubble {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+.typing-dot {
+  animation: typingBubble 1.4s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Online Status Pulse */
+@keyframes statusPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+  }
+}
+
+.status-online {
+  animation: statusPulse 2s infinite;
+}
+
+/* Message Reaction Animations */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-10deg);
+  }
+  70% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.reaction-pop {
+  animation: popIn 0.3s ease-out;
+}
+
+/* Mobile Responsive Enhancements */
+@media (max-width: 768px) {
+  .mobile-glass {
+    background: rgba(15, 23, 42, 0.95);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+  }
+
+  .mobile-bottom-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .mobile-top-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Focus Management for Accessibility */
+.focus-ring:focus {
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+/* Selection Styles */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: white;
+}
+
+::-moz-selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: white;
+}
+
+/* Chat-specific background patterns */
+.chat-bg {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(120, 119, 198, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(255, 119, 198, 0.03) 0%, transparent 50%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.97) 0%, rgba(30, 41, 59, 0.95) 100%);
+}
+
+/* Message bubble specific styles */
+.message-bubble-own {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.message-bubble-other {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Loading animations */
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.shimmer {
+  animation: shimmer 1.5s infinite linear;
+  background: linear-gradient(to right, rgba(255,255,255,0.03) 8%, rgba(255,255,255,0.08) 18%, rgba(255,255,255,0.03) 33%);
+  background-size: 800px 104px;
+}
+
+/* Ensure no content overlap with proper stacking */
+.stacking-context {
+  isolation: isolate;
+}
+
+/* Custom gradient text variations */
+.gradient-text-purple {
+  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-blue {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced button states */
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Input field enhancements */
+.input-modern {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.input-modern:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Make sure the existing animations are preserved */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Video mirror effect for local video */
+.mirror {
+  transform: scaleX(-1);
+}
+
+/* Custom gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

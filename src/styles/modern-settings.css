@@ -1,0 +1,280 @@
+/* Modern CSS Variables and Animations */
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  --modern-radius: 20px;
+  --smooth-transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Light mode specific variables */
+.light {
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Modern Scrollbar */
+.settings-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.settings-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.settings-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  border-radius: 10px;
+}
+
+.light .settings-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Glass Morphism Effects */
+.glass-card {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.light .glass-card {
+  color: #0f172a;
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.07);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: var(--smooth-transition);
+}
+
+.light .glass-input {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #0f172a;
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.light .glass-input:focus {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(79, 70, 229, 0.3);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* Modern Toggle Switch */
+.modern-toggle {
+  width: 60px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  transition: var(--smooth-transition);
+}
+
+.light .modern-toggle {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.modern-toggle::before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  top: 3px;
+  left: 3px;
+  transition: var(--smooth-transition);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.light .modern-toggle::before {
+  background: #ffffff;
+}
+
+.modern-toggle.active {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.light .modern-toggle.active {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+.modern-toggle.active::before {
+  transform: translateX(28px);
+  background: white;
+}
+
+/* Hover Lift Effect */
+.hover-lift {
+  transition: var(--smooth-transition);
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.light .hover-lift:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.light .gradient-text {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed, #0891b2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Pulse Animation for Save Button */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.light .pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Enhanced text visibility for light mode */
+.light .text-gray-300 {
+  color: #64748b !important;
+  font-weight: 500;
+}
+
+.light .text-gray-400 {
+  color: #475569 !important;
+  font-weight: 500;
+}
+
+.light .text-gray-500 {
+  color: #334155 !important;
+  font-weight: 500;
+}
+
+.light .font-medium {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.light .font-bold {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* Enhanced settings section headers */
+.light h2 {
+  color: #0f172a !important;
+  font-weight: 700;
+}
+
+.light h3 {
+  color: #0f172a !important;
+  font-weight: 600;
+}
+
+/* Enhanced form labels */
+.light label {
+  color: #334155 !important;
+  font-weight: 600;
+}
+
+/* Enhanced button text */
+.light button {
+  color: #0f172a !important;
+  font-weight: 500;
+}
+
+.light button:hover {
+  color: #1e293b !important;
+}
+
+/* Sidebar specific light mode fixes */
+.light .sidebar-light-fix {
+    background: var(--sidebar-bg-light) !important;
+    color: var(--sidebar-text-light) !important;
+}
+
+.light .sidebar-item {
+    color: var(--sidebar-text-light) !important;
+}
+
+.light .sidebar-item:hover {
+    background: var(--hover-bg-light) !important;
+    color: var(--sidebar-text-light) !important;
+}
+
+.light .sidebar-header {
+    color: var(--sidebar-text-light) !important;
+    border-color: var(--sidebar-border-light) !important;
+}
+
+/* Fix the user profile section */
+.light .user-profile-section {
+    color: var(--sidebar-text-light) !important;
+}
+
+.light .user-status {
+    color: var(--sidebar-muted-light) !important;
+}
+
+/* Fix the chat list items */
+.light .chat-list-item {
+    background: transparent !important;
+    color: var(--sidebar-text-light) !important;
+}
+
+.light .chat-list-item:hover {
+    background: var(--hover-bg-light) !important;
+}
+
+/* Fix the security badge */
+.light .security-badge {
+    color: var(--sidebar-muted-light) !important;
+}

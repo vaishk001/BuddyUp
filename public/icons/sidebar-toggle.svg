@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sidebar toggle">
+  <!-- Transparent background to adapt to app themes -->
+  <rect width="512" height="512" fill="transparent"/>
+  <!-- Three rounded bars -->
+  <rect x="96" y="132" width="320" height="48" rx="12" fill="currentColor"/>
+  <rect x="96" y="232" width="320" height="48" rx="12" fill="currentColor"/>
+  <rect x="96" y="332" width="320" height="48" rx="12" fill="currentColor"/>
+</svg>
